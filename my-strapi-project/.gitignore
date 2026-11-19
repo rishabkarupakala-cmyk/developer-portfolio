@@ -1,0 +1,168 @@
+############################
+# OS X
+############################
+
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+.Spotlight-V100
+.Trashes
+._*
+
+
+############################
+# Linux
+############################
+
+*~
+
+
+############################
+# Windows
+############################
+
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+
+
+############################
+# Packages
+############################
+
+*.7z
+*.csv
+*.dat
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.seed
+*.so
+*.swo
+*.swp
+*.swn
+*.swm
+*.out
+*.pid
+
+
+############################
+# Logs and databases
+############################
+
+.tmp
+*.log
+*.sql
+*.sqlite
+*.sqlite3
+
+
+############################
+# Misc.
+############################
+
+*#
+ssl
+.idea
+nbproject
+public/uploads/*
+!public/uploads/.gitkeep
+.tsbuildinfo
+.eslintcache
+
+############################
+# Node.js
+############################
+
+lib-cov
+lcov.info
+pids
+logs
+results
+node_modules
+.node_history
+
+############################
+# Package managers
+############################
+
+.yarn/*
+!.yarn/cache
+!.yarn/unplugged
+!.yarn/patches
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+yarn-error.log
+
+############################
+# Tests
+############################
+
+coverage
+
+############################
+# Strapi
+############################
+
+.env
+license.txt
+exports
+.strapi
+dist
+build
+.strapi-updater.json
+.strapi-cloud.json
+
+
+node_modules/
+dist/
+build/
+.env
+.env.*
+!.env.example
+.tmp/
+.cache/
+```
+
+Also make sure you don't upload a production database, private uploads, or secret keys. Strapi may use SQLite locally, so we should preserve your local data rather than blindly upload database files.
+
+## Step 3 — Create a separate GitHub repository
+
+Open <Link url="https://github.com/new" title="GitHub — Create repository"/> and create a repository named **`developer-portfolio-strapi`**.
+
+- Choose Public or Private. I'd recommend **Private** for now.
+- Leave README, `.gitignore`, and license unchecked.
+
+Then come back here and tell me when the repository is created. We'll initialize Git inside the Strapi folder, verify the files, commit, and push it safely.
+
+
+# Dependencies and build output
+node_modules/
+dist/
+build/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Temporary files and logs
+.tmp/
+.cache/
