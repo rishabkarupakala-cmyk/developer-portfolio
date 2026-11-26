@@ -805,7 +805,8 @@ gsap.fromTo(
 
 
       
-{/* Skills */}
+
+{/* Skills / Toolkit */}
 <section className="section skills-section" id="skills">
   <div className="container">
     <div className="section-heading">
@@ -815,84 +816,197 @@ gsap.fromTo(
           Tools of the trade<span>.</span>
         </h2>
       </div>
-
       <span className="heading-icon" aria-hidden="true">✳</span>
     </div>
 
-    <div className="skills-grid">
-      {(skills.length
+    {(() => {
+      const allSkills = skills.length
         ? skills
         : [
-            "JavaScript",
             "React",
-            "HTML & CSS",
+            "TypeScript",
+            "JavaScript",
+            "HTML",
+            "CSS",
+            "Tailwind CSS",
             "Node.js",
+            "Express.js",
+            "Strapi",
+            "SQL",
+            "PostgreSQL",
+            "SQLite",
+            "Prisma",
+            "GSAP",
             "REST APIs",
             "Git",
-          ]
-      ).map((skill, index) => {
-        const name =
-          typeof skill === "string"
-            ? skill
-            : getField(
-                skill,
-                "name",
-                "title",
-                "Title",
-                "skillName"
-              ) || "Skill";
+            "GitHub",
+          ];
 
-        const normalizedName = name.toLowerCase();
+      const categories = [
+        {
+          title: "Frontend",
+          description: "Interfaces & client-side development",
+          matches: [
+            "react", "typescript", "javascript", "html",
+            "css", "tailwind", "vite", "next.js"
+          ],
+        },
+        {
+          title: "Backend",
+          description: "Server-side logic & application development",
+          matches: [
+            "node", "express", "strapi", "django",
+            "flask", "java", "php"
+          ],
+        },
+        {
+          title: "Database",
+          description: "Data storage & management",
+          matches: [
+            "sql", "postgresql", "mysql", "sqlite",
+            "mongodb", "prisma", "supabase", "firebase"
+          ],
+        },
+        {
+          title: "Animation",
+          description: "Motion & interactive experiences",
+          matches: [
+            "gsap", "framer motion", "motion",
+            "lottie", "anime.js"
+          ],
+        },
+        {
+          title: "API & Tools",
+          description: "Integrations & developer workflow",
+          matches: [
+            "api", "git", "github", "postman",
+            "docker", "vercel", "figma"
+          ],
+        },
+      ];
 
-        const symbol = normalizedName.includes("react")
-          ? "⚛"
-          : normalizedName.includes("typescript")
-            ? "TS"
-            : normalizedName.includes("javascript")
-              ? "JS"
-              : normalizedName.includes("html") ||
-                  normalizedName.includes("css")
-                ? "◇"
-                : normalizedName.includes("node")
-                  ? "⬡"
-                  : normalizedName.includes("sql")
-                    ? "▤"
-                    : normalizedName.includes("git")
-                      ? "⑂"
-                      : normalizedName.includes("api")
-                        ? "</>"
-                        : "✳";
+      const getSkillName = (skill) =>
+        typeof skill === "string"
+          ? skill
+          : getField(
+              skill,
+              "name",
+              "title",
+              "Title",
+              "skillName"
+            ) || "Skill";
 
-        return (
-          <article
-            className="skill-item"
-            key={
-              typeof skill === "object"
-                ? skill.documentId || skill.id || `${name}-${index}`
-                : `${name}-${index}`
-            }
-          >
-            <div className="skill-card-top">
-              <span className="skill-icon" aria-hidden="true">
-                {symbol}
-              </span>
-              <span className="skill-index">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-            </div>
+      const getCategory = (name) => {
+        const normalized = name.toLowerCase();
 
-            <div className="skill-card-bottom">
-              <h3>{name}</h3>
-              <span className="skill-arrow" aria-hidden="true">
-                ↗
-              </span>
-            </div>
+        return categories.find((category) =>
+          category.matches.some((match) =>
+            normalized.includes(match)
+          )
+        )?.title;
+      };
 
-            <span className="skill-card-glow" aria-hidden="true" />
-          </article>
-        );
-      })}
-    </div>
+      let skillIndex = 0;
+
+      return (
+        <div className="toolkit-categories">
+          {categories.map((category) => {
+            const categorySkills = allSkills.filter(
+              (skill) =>
+                getCategory(getSkillName(skill)) === category.title
+            );
+
+            if (categorySkills.length === 0) return null;
+
+            return (
+              <div
+                className="toolkit-category"
+                key={category.title}
+              >
+                <div className="toolkit-category-heading">
+                  <div>
+                    <span className="toolkit-category-label">
+                      {String(
+                        categories.indexOf(category) + 1
+                      ).padStart(2, "0")}{" "}
+                      / CATEGORY
+                    </span>
+                    <h3>{category.title}<span>.</span></h3>
+                    <p>{category.description}</p>
+                  </div>
+                  <span className="toolkit-category-count">
+                    {String(categorySkills.length).padStart(2, "0")}
+                  </span>
+                </div>
+
+                <div className="skills-grid">
+                  {categorySkills.map((skill) => {
+                    const name = getSkillName(skill);
+                    const index = ++skillIndex;
+                    const normalized = name.toLowerCase();
+
+                    const symbol =
+                      normalized.includes("react") ? "⚛" :
+                      normalized.includes("typescript") ? "TS" :
+                      normalized.includes("javascript") ? "JS" :
+                      normalized.includes("html") ? "H5" :
+                      normalized.includes("css") ? "◇" :
+                      normalized.includes("node") ? "⬡" :
+                      normalized.includes("sql") ? "▤" :
+                      normalized.includes("git") ? "⑂" :
+                      normalized.includes("api") ? "</>" :
+                      normalized.includes("gsap") ? "✳" :
+                      normalized.includes("python") ? "Py" :
+                      normalized.includes("prisma") ? "◈" :
+                      "✳";
+
+                    return (
+                      <article
+                        className="skill-item"
+                        key={
+                          typeof skill === "object"
+                            ? skill.documentId ||
+                              skill.id ||
+                              `${name}-${index}`
+                            : `${name}-${index}`
+                        }
+                      >
+                        <div className="skill-card-top">
+                          <span
+                            className="skill-icon"
+                            aria-hidden="true"
+                          >
+                            {symbol}
+                          </span>
+                          <span className="skill-index">
+                            {String(index).padStart(2, "0")}
+                          </span>
+                        </div>
+
+                        <div className="skill-card-bottom">
+                          <h3>{name}</h3>
+                          <span
+                            className="skill-arrow"
+                            aria-hidden="true"
+                          >
+                            ↗
+                          </span>
+                        </div>
+
+                        <span
+                          className="skill-card-glow"
+                          aria-hidden="true"
+                        />
+                      </article>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
+    })()}
 
     {skills.length === 0 && (
       <p className="section-note">
