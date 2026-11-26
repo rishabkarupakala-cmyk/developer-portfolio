@@ -119,54 +119,86 @@ useEffect(() => {
   // GSAP animations
 
 
-  // Additive cinematic navigation wipe; existing anchors and page structure stay intact.
-  useEffect(() => {
-    const overlay = document.querySelector(".cinematic-nav-wipe");
-    const links = document.querySelectorAll(".nav-links a[href^='#']");
-    if (!overlay || !links.length) return;
+  
+  // Cinematic curtain-drop transition on section scroll
+useEffect(() => {
+  const overlay = document.querySelector(".cinematic-nav-wipe");
 
+  if (!overlay) return;
+
+  // Respect the user's reduced-motion preference.
+  const media = gsap.matchMedia();
+
+  media.add("(prefers-reduced-motion: no-preference)", () => {
     let isTransitioning = false;
-    const handlers = [];
 
-    links.forEach((link) => {
-      const handleClick = (event) => {
-        const href = link.getAttribute("href");
-        const target = href ? document.querySelector(href) : null;
-        if (!target || isTransitioning) return;
-
-        event.preventDefault();
-        isTransitioning = true;
-
-        gsap.killTweensOf(overlay);
-        gsap.set(overlay, { yPercent: 100, autoAlpha: 1 });
-
-        gsap.timeline({
-          defaults: { ease: "power4.inOut" },
-          onComplete: () => {
-            isTransitioning = false;
-            window.location.hash = href;
-          },
-        })
-          .to(overlay, { yPercent: 0, duration: 0.48 })
-          .add(() => {
-            window.scrollTo({
-              top: target.getBoundingClientRect().top + window.scrollY,
-              behavior: "auto",
-            });
-          })
-          .to(overlay, { yPercent: -100, duration: 0.58 })
-          .set(overlay, { autoAlpha: 0, yPercent: 100 });
-      };
-
-      link.addEventListener("click", handleClick);
-      handlers.push(() => link.removeEventListener("click", handleClick));
+    gsap.set(overlay, {
+      yPercent: -100,
+      autoAlpha: 0,
     });
 
-    return () => {
-      handlers.forEach((remove) => remove());
+    const sections = gsap.utils.toArray("main section[id]");
+
+    const playCurtain = () => {
+      if (isTransitioning) return;
+
+      isTransitioning = true;
+
       gsap.killTweensOf(overlay);
+
+      gsap.timeline({
+        defaults: {
+          ease: "power3.inOut",
+        },
+        onComplete: () => {
+          gsap.set(overlay, {
+            yPercent: -100,
+            autoAlpha: 0,
+          });
+
+          isTransitioning = false;
+        },
+      })
+        // Curtain drops over the viewport.
+        .set(overlay, {
+          yPercent: -100,
+          autoAlpha: 1,
+        })
+        .to(overlay, {
+          yPercent: 0,
+          duration: 0.35,
+          ease: "power2.in",
+        })
+        // Curtain slides away to reveal the section.
+        .to(overlay, {
+          yPercent: 100,
+          duration: 0.5,
+          ease: "power3.inOut",
+        });
     };
-  }, []);
+
+    const triggers = sections.map((section) =>
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top 60%",
+        onEnter: playCurtain,
+        onEnterBack: playCurtain,
+      })
+    );
+
+    return () => {
+      triggers.forEach((trigger) => trigger.kill());
+      gsap.killTweensOf(overlay);
+      gsap.set(overlay, {
+        yPercent: -100,
+        autoAlpha: 0,
+      });
+    };
+  });
+
+  return () => media.revert();
+}, []);
+
 
   // Additional section reveals complement the existing hero/project/about animations.
   useGSAP(() => {
