@@ -117,6 +117,92 @@ useEffect(() => {
   }, []);
 
   // GSAP animations
+
+
+  // Additive cinematic navigation wipe; existing anchors and page structure stay intact.
+  useEffect(() => {
+    const overlay = document.querySelector(".cinematic-nav-wipe");
+    const links = document.querySelectorAll(".nav-links a[href^='#']");
+    if (!overlay || !links.length) return;
+
+    let isTransitioning = false;
+    const handlers = [];
+
+    links.forEach((link) => {
+      const handleClick = (event) => {
+        const href = link.getAttribute("href");
+        const target = href ? document.querySelector(href) : null;
+        if (!target || isTransitioning) return;
+
+        event.preventDefault();
+        isTransitioning = true;
+
+        gsap.killTweensOf(overlay);
+        gsap.set(overlay, { yPercent: 100, autoAlpha: 1 });
+
+        gsap.timeline({
+          defaults: { ease: "power4.inOut" },
+          onComplete: () => {
+            isTransitioning = false;
+            window.location.hash = href;
+          },
+        })
+          .to(overlay, { yPercent: 0, duration: 0.48 })
+          .add(() => {
+            window.scrollTo({
+              top: target.getBoundingClientRect().top + window.scrollY,
+              behavior: "auto",
+            });
+          })
+          .to(overlay, { yPercent: -100, duration: 0.58 })
+          .set(overlay, { autoAlpha: 0, yPercent: 100 });
+      };
+
+      link.addEventListener("click", handleClick);
+      handlers.push(() => link.removeEventListener("click", handleClick));
+    });
+
+    return () => {
+      handlers.forEach((remove) => remove());
+      gsap.killTweensOf(overlay);
+    };
+  }, []);
+
+  // Additional section reveals complement the existing hero/project/about animations.
+  useGSAP(() => {
+    const motion = gsap.matchMedia();
+
+    motion.add("(prefers-reduced-motion: no-preference)", () => {
+      gsap.fromTo(
+        ".section-heading, .experience-section .section-heading, .footer-eyebrow",
+        { y: 32, autoAlpha: 0 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.85,
+          stagger: 0.12,
+          ease: "power3.out",
+          scrollTrigger: { start: "top 88%", once: true },
+        }
+      );
+
+      gsap.fromTo(
+        ".experience-item, .footer-side",
+        { y: 38, autoAlpha: 0 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.8,
+          stagger: 0.12,
+          ease: "power3.out",
+          scrollTrigger: { trigger: ".experience-section", start: "top 82%", once: true },
+        }
+      );
+    });
+
+    return () => motion.revert();
+  }, { scope: heroRef });
+
   useGSAP(
     () => {
       const motion = gsap.matchMedia();
@@ -321,6 +407,9 @@ gsap.fromTo(
 
   return (
       <>
+    {/* Additive full-screen transition layer for cinematic nav wipes */}
+    <div className="cinematic-nav-wipe" aria-hidden="true" />
+
     {/* Scroll progress bar */}
     <div
       className="scroll-progress"
