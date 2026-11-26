@@ -15,13 +15,16 @@
       "type": "string"
     },
     "category": {
-      "type": "enumeration",
-      "enum": [
-        "Frontend",
-        "Backend",
-        "Database",
-        "Tools"
-      ]
+  "type": "enumeration",
+  "enum": [
+    "Frontend",
+    "Backend",
+    "Database",
+    "Animation",
+    "API",
+    "Tools"
+  ]
+}
     },
     "proficiency": {
       "type": "integer"
@@ -30,4 +33,4 @@
       "type": "string"
     }
   }
-}
+
