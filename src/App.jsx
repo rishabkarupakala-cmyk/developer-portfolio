@@ -1137,7 +1137,7 @@ gsap.fromTo(
 
             <nav className="footer-socials" aria-label="Social links">
               <a
-                href="https://github.com"
+                href="https://github.com/rishabkarupakala-cmyk"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -1145,7 +1145,7 @@ gsap.fromTo(
               </a>
 
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/rishab-karupakala-13b37a206/"
                 target="_blank"
                 rel="noreferrer"
               >
