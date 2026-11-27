@@ -2505,31 +2505,35 @@
 }
 
 
-/* Get in touch — accent styling */
+/* Get in touch — violet button */
 [data-about-section] [data-about-link] {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 8px;
-  color: #b69aff;
-  text-decoration: none;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 12px 20px;
+  border: 1px solid #a78bfa;
+  border-radius: 8px;
+  background: #8b5cf6;
+  color: #ffffff;
   font-weight: 500;
+  text-decoration: none;
   transition:
-    color 250ms ease,
-    gap 250ms ease,
-    text-shadow 250ms ease;
+    background 250ms ease,
+    box-shadow 250ms ease,
+    transform 250ms ease;
 }
 
 [data-about-section] [data-about-link]:hover {
-  color: #d6c5ff;
-  gap: 13px;
-  text-shadow: 0 0 18px rgb(167 139 250 / 35%);
+  background: #7c3aed;
+  box-shadow: 0 0 24px rgb(139 92 246 / 30%);
+  transform: translateY(-2px);
 }
 
 [data-about-section] [data-about-link]:focus-visible {
-  outline: 2px solid #b69aff;
-  outline-offset: 5px;
-  border-radius: 3px;
+  outline: 2px solid #c4b5fd;
+  outline-offset: 4px;
 }
 
 @media (prefers-reduced-motion: reduce) {
