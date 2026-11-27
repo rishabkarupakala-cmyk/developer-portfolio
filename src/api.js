@@ -4,16 +4,35 @@ const STRAPI_URL = (
 ).replace(/\/+$/, "");
 
 export async function fetchCollection(collection) {
-  const response = await fetch(
-    `${STRAPI_URL}/api/${collection}?populate=*`
-  );
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-  if (!response.ok) {
-    throw new Error(`${collection}: HTTP ${response.status}`);
+  try {
+    const response = await fetch(
+      `${STRAPI_URL}/api/${collection}?populate=*`,
+      { signal: controller.signal }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch ${collection}: HTTP ${response.status}`
+      );
+    }
+
+    const result = await response.json();
+
+    return Array.isArray(result.data) ? result.data : [];
+  } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error(
+        `Fetching ${collection} timed out after 15 seconds`
+      );
+    }
+
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
   }
-
-  const result = await response.json();
-  return Array.isArray(result.data) ? result.data : [];
 }
 
 export function getStrapiImage(media) {
