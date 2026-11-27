@@ -416,27 +416,6 @@ gsap.fromTo(
   );
 
 
-gsap.fromTo(
-  ".skill-item",
-  {
-    y: 35,
-    autoAlpha: 0,
-  },
-  {
-    y: 0,
-    autoAlpha: 1,
-    duration: 0.65,
-    stagger: 0.1,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: ".skills-grid",
-      start: "top 85%",
-      once: true,
-    },
-  }
-);
-
-
   return (
       <>
     {/* Additive full-screen transition layer for cinematic nav wipes */}
